@@ -6,7 +6,7 @@ tasks:
   build:
     cmds:
       - mkdir -p build
-      - go build -o ./build/harborman ./main.go
+      - go build -o ./build/harborman .
   clean:
     cmd: rm -rf ./build
   generates:
