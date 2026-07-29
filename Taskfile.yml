@@ -1,0 +1,13 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: "3"
+
+tasks:
+  build:
+    cmds:
+      - mkdir -p build
+      - go build -o ./build/harborman ./main.go
+  clean:
+    cmd: rm -rf ./build
+  generates:
+    - ./build/harborman
