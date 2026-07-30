@@ -16,9 +16,9 @@ func FromCfg(nc []cfg.NotifierCfg) []Notifier {
 	for _, v := range nc {
 		switch v.Type {
 		case cfg.NotifierTypeDiscord:
-			notifiers = append(notifiers, NewDiscordNotifier(v.URL))
+			// notifiers = append(notifiers, NewDiscordNotifier(v.URL))
 		case cfg.NotifierTypeLark:
-			notifiers = append(notifiers, NewLarkNotifier(v.URL))
+			// notifiers = append(notifiers, NewLarkNotifier(v.URL))
 		}
 	}
 
