@@ -12,7 +12,7 @@ func TestPushEventFilter_Filter(t *testing.T) {
 	tests := []struct {
 		name string
 		opts []notifier.PushEventFilterOption
-		e    *harbor.HarborEvent
+		e    *harbor.Event
 		want []harbor.Resource
 	}{
 		{
@@ -24,7 +24,7 @@ func TestPushEventFilter_Filter(t *testing.T) {
 		{
 			name: "resources is empty",
 			opts: []notifier.PushEventFilterOption{},
-			e: &harbor.HarborEvent{
+			e: &harbor.Event{
 				EventData: harbor.EventData{
 					Resources: make([]harbor.Resource, 0),
 				},
@@ -36,7 +36,7 @@ func TestPushEventFilter_Filter(t *testing.T) {
 			opts: []notifier.PushEventFilterOption{
 				notifier.WithFilterNoTag(),
 			},
-			e: &harbor.HarborEvent{
+			e: &harbor.Event{
 				EventData: harbor.EventData{
 					Resources: []harbor.Resource{
 						{Tag: "", Digest: "sha256:f1f72d58-224d-4263-8d49-6bcb517c27c9"}, // filtered
@@ -53,10 +53,13 @@ func TestPushEventFilter_Filter(t *testing.T) {
 			opts: []notifier.PushEventFilterOption{
 				notifier.WithFilterTagEqualDigest(),
 			},
-			e: &harbor.HarborEvent{
+			e: &harbor.Event{
 				EventData: harbor.EventData{
 					Resources: []harbor.Resource{
-						{Tag: "sha256:f1f72d58-224d-4263-8d49-6bcb517c27c9", Digest: "sha256:f1f72d58-224d-4263-8d49-6bcb517c27c9"}, // filtered
+						{
+							Tag:    "sha256:f1f72d58-224d-4263-8d49-6bcb517c27c9",
+							Digest: "sha256:f1f72d58-224d-4263-8d49-6bcb517c27c9",
+						}, // filtered
 						{Tag: "v1.0.0", Digest: "sha256:ef3891a0-8e24-45ae-a163-0504b6bfea9c"},
 					},
 				},

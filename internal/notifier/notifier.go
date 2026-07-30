@@ -8,7 +8,7 @@ import (
 
 type Notifier interface {
 	Type() string
-	Notify(*harbor.HarborEvent) error
+	Notify(*harbor.Event) error
 }
 
 func FromCfg(nc []cfg.NotifierCfg) []Notifier {

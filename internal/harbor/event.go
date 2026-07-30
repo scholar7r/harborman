@@ -6,7 +6,7 @@ const (
 	EventQuotaExceed  = "QUOTA_EXCEED"
 )
 
-type HarborEvent struct {
+type Event struct {
 	Type      string    `json:"type"`
 	OccurAt   int64     `json:"occur_at"`
 	Operator  string    `json:"operator"`

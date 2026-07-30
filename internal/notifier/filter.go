@@ -20,7 +20,7 @@ func NewPushEventFilter(opts ...PushEventFilterOption) *PushEventFilter {
 	return pushEventFilter
 }
 
-func (f *PushEventFilter) Filter(e *harbor.HarborEvent) []harbor.Resource {
+func (f *PushEventFilter) Filter(e *harbor.Event) []harbor.Resource {
 	if e == nil || len(e.EventData.Resources) == 0 {
 		return nil
 	}

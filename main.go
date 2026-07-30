@@ -5,33 +5,51 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+	"time"
 
 	"code.0x7r.com/scholar7r/harborman/internal/cfg"
 	"code.0x7r.com/scholar7r/harborman/internal/handler"
 	"code.0x7r.com/scholar7r/harborman/internal/notifier"
 )
 
-var cfgPath string
+const (
+	readTimeout  = 30 * time.Second
+	writeTimeout = 30 * time.Second
+	idleTimeout  = 60 * time.Second
+)
 
-func FromArg() {
+type option struct {
+	cfgPath string
+}
+
+func fromArg() option {
+	var opts option
+
 	flag.StringVar(
-		&cfgPath,
+		&opts.cfgPath,
 		"c",
 		"./harborman.yaml",
 		"specify configuration file path",
 	)
 
 	flag.Parse()
+
+	return opts
 }
 
 func main() {
-	FromArg()
+	opts := fromArg()
 
-	if cfgPath == "" {
+	if opts.cfgPath == "" {
 		flag.Usage()
 	}
 
-	c, err := cfg.FromFile(cfgPath)
+	logger := slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{
+		Level: slog.LevelInfo,
+	}))
+	slog.SetDefault(logger)
+
+	c, err := cfg.FromFile(opts.cfgPath)
 	if err != nil {
 		slog.Error(
 			"failed to load configuration",
@@ -49,7 +67,15 @@ func main() {
 	notifiers := notifier.FromCfg(c.Notifiers)
 	handler := handler.NewNotifyHandler(notifiers)
 
-	if err = http.ListenAndServe(c.Listen, handler); err != nil {
+	server := &http.Server{
+		Addr:         c.Listen,
+		Handler:      handler,
+		ReadTimeout:  readTimeout,
+		WriteTimeout: writeTimeout,
+		IdleTimeout:  idleTimeout,
+	}
+
+	if err = server.ListenAndServe(); err != nil {
 		slog.Error(
 			"failed to listen",
 			slog.String("addr", c.Listen),

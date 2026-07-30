@@ -32,7 +32,8 @@ func (nh *NotifyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
-		slog.Error(
+		slog.ErrorContext(
+			r.Context(),
 			"failed to read request body",
 			slog.String("error", err.Error()),
 		)
@@ -48,9 +49,10 @@ func (nh *NotifyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	defer func() { _ = r.Body.Close() }()
 
-	var event harbor.HarborEvent
+	var event harbor.Event
 	if err = json.Unmarshal(body, &event); err != nil {
-		slog.Error(
+		slog.ErrorContext(
+			r.Context(),
 			"failed to unmarshal harbor event",
 			slog.String("error", err.Error()),
 		)
@@ -65,8 +67,9 @@ func (nh *NotifyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, v := range nh.notifiers {
-		if err := v.Notify(&event); err != nil {
-			slog.Error(
+		if err = v.Notify(&event); err != nil {
+			slog.ErrorContext(
+				r.Context(),
 				"failed to send notification",
 				slog.String("error", err.Error()),
 			)
