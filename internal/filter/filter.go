@@ -1,4 +1,4 @@
-package notifier
+package filter
 
 import "code.0x7r.com/scholar7r/harborman/internal/harbor"
 

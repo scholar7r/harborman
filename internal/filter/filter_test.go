@@ -1,29 +1,29 @@
-package notifier_test
+package filter_test
 
 import (
 	"reflect"
 	"testing"
 
+	"code.0x7r.com/scholar7r/harborman/internal/filter"
 	"code.0x7r.com/scholar7r/harborman/internal/harbor"
-	"code.0x7r.com/scholar7r/harborman/internal/notifier"
 )
 
 func TestPushEventFilter_Filter(t *testing.T) {
 	tests := []struct {
 		name string
-		opts []notifier.PushEventFilterOption
+		opts []filter.PushEventFilterOption
 		e    *harbor.Event
 		want []harbor.Resource
 	}{
 		{
 			name: "event is nil",
-			opts: []notifier.PushEventFilterOption{},
+			opts: []filter.PushEventFilterOption{},
 			e:    nil,
 			want: nil,
 		},
 		{
 			name: "resources is empty",
-			opts: []notifier.PushEventFilterOption{},
+			opts: []filter.PushEventFilterOption{},
 			e: &harbor.Event{
 				EventData: harbor.EventData{
 					Resources: make([]harbor.Resource, 0),
@@ -33,8 +33,8 @@ func TestPushEventFilter_Filter(t *testing.T) {
 		},
 		{
 			name: "filter no tag",
-			opts: []notifier.PushEventFilterOption{
-				notifier.WithFilterNoTag(),
+			opts: []filter.PushEventFilterOption{
+				filter.WithFilterNoTag(),
 			},
 			e: &harbor.Event{
 				EventData: harbor.EventData{
@@ -50,8 +50,8 @@ func TestPushEventFilter_Filter(t *testing.T) {
 		},
 		{
 			name: "filter tag equal digest",
-			opts: []notifier.PushEventFilterOption{
-				notifier.WithFilterTagEqualDigest(),
+			opts: []filter.PushEventFilterOption{
+				filter.WithFilterTagEqualDigest(),
 			},
 			e: &harbor.Event{
 				EventData: harbor.EventData{
@@ -71,7 +71,7 @@ func TestPushEventFilter_Filter(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			f := notifier.NewPushEventFilter(tt.opts...)
+			f := filter.NewPushEventFilter(tt.opts...)
 			got := f.Filter(tt.e)
 
 			if !reflect.DeepEqual(got, tt.want) {
