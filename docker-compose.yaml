@@ -3,7 +3,7 @@ services:
     image: code.0x7r.com/scholar7r/harborman:1.0.0
     container_name: harborman
     restart: unless-stopped
-    command: harborman -c /workspace/harborman.yaml
+    command: /workspace/harborman -c /workspace/harborman.yaml
     ports:
       - 80:80
     volumes:
