@@ -45,7 +45,7 @@ func main() {
 	}
 
 	logger := slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{
-		Level: slog.LevelInfo,
+		Level: slog.LevelDebug,
 	}))
 	slog.SetDefault(logger)
 
@@ -64,7 +64,8 @@ func main() {
 		slog.String("addr", c.Listen),
 	)
 
-	notifiers := notifier.FromCfg(c.Notifiers)
+	client := &http.Client{Timeout: readTimeout}
+	notifiers := notifier.FromCfg(client, c.Notifiers)
 	handler := handler.NewNotifyHandler(notifiers)
 
 	server := &http.Server{
