@@ -8,6 +8,7 @@ import (
 )
 
 type Cfg struct {
+	Debug     bool          `yaml:"debug"`
 	Listen    string        `yaml:"listen"`
 	Notifiers []NotifierCfg `yaml:"notifiers"`
 }

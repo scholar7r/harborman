@@ -49,11 +49,6 @@ func main() {
 		flag.Usage()
 	}
 
-	logger := slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{
-		Level: slog.LevelDebug,
-	}))
-	slog.SetDefault(logger)
-
 	c, err := cfg.FromFile(opts.cfgPath)
 	if err != nil {
 		slog.Error(
@@ -63,6 +58,17 @@ func main() {
 
 		os.Exit(1)
 	}
+
+	level := slog.LevelInfo
+	if c.Debug {
+		level = slog.LevelDebug
+	}
+
+	slog.SetDefault(
+		slog.New(
+			slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: level}),
+		),
+	)
 
 	client := &http.Client{Timeout: readTimeout}
 	notifiers := notifier.FromCfg(client, c.Notifiers)
