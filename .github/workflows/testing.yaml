@@ -13,6 +13,8 @@ jobs:
           go-version: stable
 
       - name: unit test
-        run: |
-          go test ./...
-          go test -race ./...
+        run: go test -race ./... -coverprofile=coverage.txt
+
+      - uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
