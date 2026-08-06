@@ -6,6 +6,7 @@ import (
 	"io"
 	"log/slog"
 	"net/http"
+	"sync"
 
 	"github.com/scholar7r/harborman/internal/harbor"
 	"github.com/scholar7r/harborman/internal/notifier"
@@ -77,13 +78,24 @@ func (nh *NotifyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	wg := &sync.WaitGroup{}
+
 	for _, v := range nh.notifiers {
-		if err = v.Notify(r.Context(), &event); err != nil {
-			slog.ErrorContext(
-				r.Context(),
-				"failed to send notification",
-				slog.String("error", err.Error()),
-			)
-		}
+		wg.Add(1)
+		go func(n notifier.Notifier) {
+			defer wg.Done()
+
+			if ce := n.Notify(r.Context(), &event); err != nil {
+				slog.ErrorContext(
+					r.Context(),
+					"failed to send notification",
+					slog.String("error", ce.Error()),
+				)
+			}
+		}(v)
 	}
+
+	wg.Wait()
+
+	w.WriteHeader(http.StatusOK)
 }
