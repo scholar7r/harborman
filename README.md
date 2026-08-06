@@ -8,6 +8,23 @@ corresponding webhook services.
 [![license](https://img.shields.io/badge/license-GPLv2-brightgreen.svg)](https://github.com/scholar7r/harborman/blob/HEAD/LICENSE)
 [![codecov](https://codecov.io/gh/scholar7r/harborman/graph/badge.svg?token=QTS2wjp3pb)](https://codecov.io/gh/scholar7r/harborman)
 
+
+## Configuration
+
+Below is a simple configuration file template. You can name it
+`harborman.yaml` and place it in the same directory as the
+`docker-compose.yaml` file; it will be mounted as a runtime configuration file.
+
+```yaml
+debug: false
+listen: ":80"
+notifiers:
+  - type: lark
+    url: "https://..."
+  - type: discord
+    url: "https://..."
+```
+
 ## Make Contributions
 
 Learn [Contributing to a project](https://docs.github.com/en/get-started/exploring-projects-on-github/contributing-to-a-project).
