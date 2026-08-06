@@ -7,8 +7,8 @@ import (
 	"log/slog"
 	"net/http"
 
-	"code.0x7r.com/scholar7r/harborman/internal/harbor"
-	"code.0x7r.com/scholar7r/harborman/internal/notifier"
+	"github.com/scholar7r/harborman/internal/harbor"
+	"github.com/scholar7r/harborman/internal/notifier"
 )
 
 type NotifyHandler struct {

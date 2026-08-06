@@ -11,9 +11,9 @@ import (
 	"syscall"
 	"time"
 
-	"code.0x7r.com/scholar7r/harborman/internal/cfg"
-	"code.0x7r.com/scholar7r/harborman/internal/handler"
-	"code.0x7r.com/scholar7r/harborman/internal/notifier"
+	"github.com/scholar7r/harborman/internal/cfg"
+	"github.com/scholar7r/harborman/internal/handler"
+	"github.com/scholar7r/harborman/internal/notifier"
 )
 
 const (

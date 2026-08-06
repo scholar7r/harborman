@@ -4,8 +4,8 @@ import (
 	"reflect"
 	"testing"
 
-	"code.0x7r.com/scholar7r/harborman/internal/filter"
-	"code.0x7r.com/scholar7r/harborman/internal/harbor"
+	"github.com/scholar7r/harborman/internal/filter"
+	"github.com/scholar7r/harborman/internal/harbor"
 )
 
 func TestPushEventFilter_Filter(t *testing.T) {

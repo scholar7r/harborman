@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"net/url"
 
-	"code.0x7r.com/scholar7r/harborman/internal/cfg"
-	"code.0x7r.com/scholar7r/harborman/internal/filter"
-	"code.0x7r.com/scholar7r/harborman/internal/harbor"
+	"github.com/scholar7r/harborman/internal/cfg"
+	"github.com/scholar7r/harborman/internal/filter"
+	"github.com/scholar7r/harborman/internal/harbor"
 )
 
 type Notifier interface {

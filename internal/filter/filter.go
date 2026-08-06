@@ -1,6 +1,7 @@
+// Package filter provides the ability to filter harbor events
 package filter
 
-import "code.0x7r.com/scholar7r/harborman/internal/harbor"
+import "github.com/scholar7r/harborman/internal/harbor"
 
 type (
 	PushEventFilterOption func(*PushEventFilter)

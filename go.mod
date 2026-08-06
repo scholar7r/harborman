@@ -1,4 +1,4 @@
-module code.0x7r.com/scholar7r/harborman
+module github.com/scholar7r/harborman
 
 go 1.26.5
 
