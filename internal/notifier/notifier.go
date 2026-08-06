@@ -46,7 +46,7 @@ func FromCfg(client *http.Client, nc []cfg.NotifierCfg) []Notifier {
 
 		switch v.Type {
 		case cfg.NotifierTypeDiscord:
-			// notifiers = append(notifiers, NewDiscord(client, v.URL, pushEventFilter))
+			notifiers = append(notifiers, NewDiscord(client, v.URL, pushEventFilter))
 		case cfg.NotifierTypeLark:
 			notifiers = append(notifiers, NewLark(client, v.URL, pushEventFilter))
 		default:
