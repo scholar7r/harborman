@@ -26,6 +26,26 @@ notifiers:
     url: "https://..."
 ```
 
+## Installation
+
+### Via docker compose
+
+Before launching harborman service, make sure that there is already a configuration
+file existed.
+
+```yaml
+services:
+  harborman:
+    image: ghcr.io/scholar7r/harborman:latest
+    container_name: harborman
+    restart: unless-stopped
+    command: /workspace/harborman -c /workspace/harborman.yaml
+    ports:
+      - 80:80
+    volumes:
+      - ./harborman.yaml:/workspace/harborman.yaml:ro
+```
+
 ## Make Contributions
 
 Learn [Contributing to a project](https://docs.github.com/en/get-started/exploring-projects-on-github/contributing-to-a-project).
