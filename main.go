@@ -72,7 +72,7 @@ func main() {
 
 	client := &http.Client{Timeout: readTimeout}
 	notifiers := notifier.FromCfg(client, c.Notifiers)
-	handler := handler.NewNotifyHandler(notifiers)
+	handler := handler.NewNotifyHandler(c, notifiers)
 
 	server := &http.Server{
 		Addr:         c.Listen,
