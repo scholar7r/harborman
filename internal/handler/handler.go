@@ -107,7 +107,7 @@ func (nh *NotifyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 
-			if ce := n.Notify(r.Context(), &event); err != nil {
+			if ce := n.Notify(r.Context(), &event); ce != nil {
 				slog.ErrorContext(
 					r.Context(),
 					"failed to send notification",
