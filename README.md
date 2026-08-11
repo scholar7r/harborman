@@ -8,7 +8,6 @@ corresponding webhook services.
 [![license](https://img.shields.io/badge/license-GPLv2-brightgreen.svg)](https://github.com/scholar7r/harborman/blob/HEAD/LICENSE)
 [![codecov](https://codecov.io/gh/scholar7r/harborman/graph/badge.svg?token=QTS2wjp3pb)](https://codecov.io/gh/scholar7r/harborman)
 
-
 ## Configuration
 
 Below is a simple configuration file template. You can name it
@@ -18,9 +17,11 @@ Below is a simple configuration file template. You can name it
 ```yaml
 debug: false
 listen: ":80"
+authorization: "..."
 notifiers:
   - type: lark
     url: "https://..."
+    authorization: "..."
   - type: discord
     url: "https://..."
 ```

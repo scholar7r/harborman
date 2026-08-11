@@ -8,16 +8,21 @@ import (
 	"net/http"
 	"sync"
 
+	"github.com/scholar7r/harborman/internal/cfg"
 	"github.com/scholar7r/harborman/internal/harbor"
 	"github.com/scholar7r/harborman/internal/notifier"
 )
 
 type NotifyHandler struct {
+	c         *cfg.Cfg
 	notifiers []notifier.Notifier
 }
 
-func NewNotifyHandler(notifiers []notifier.Notifier) *NotifyHandler {
-	return &NotifyHandler{notifiers: notifiers}
+func NewNotifyHandler(c *cfg.Cfg, notifiers []notifier.Notifier) *NotifyHandler {
+	return &NotifyHandler{
+		c:         c,
+		notifiers: notifiers,
+	}
 }
 
 func (nh *NotifyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -79,11 +84,28 @@ func (nh *NotifyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	wg := &sync.WaitGroup{}
+	clientToken := r.Header.Get("Authorization")
 
-	for _, v := range nh.notifiers {
+	for i, v := range nh.notifiers {
 		wg.Add(1)
-		go func(n notifier.Notifier) {
+		go func(idx int, n notifier.Notifier) {
 			defer wg.Done()
+
+			if clientToken != "" {
+				localToken := nh.c.Notifiers[idx].Authorization
+				if localToken == "" {
+					localToken = nh.c.Authorization
+				}
+
+				if localToken != "" && localToken != clientToken {
+					slog.ErrorContext(
+						r.Context(),
+						"incorrect authorization token",
+						slog.Int("notifier_index", idx),
+					)
+					return
+				}
+			}
 
 			if ce := n.Notify(r.Context(), &event); err != nil {
 				slog.ErrorContext(
@@ -92,7 +114,7 @@ func (nh *NotifyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					slog.String("error", ce.Error()),
 				)
 			}
-		}(v)
+		}(i, v)
 	}
 
 	wg.Wait()
