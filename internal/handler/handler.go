@@ -8,21 +8,16 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/scholar7r/harborman/internal/cfg"
 	"github.com/scholar7r/harborman/internal/harbor"
 	"github.com/scholar7r/harborman/internal/notifier"
 )
 
 type NotifyHandler struct {
-	c         *cfg.Cfg
 	notifiers []notifier.Notifier
 }
 
-func NewNotifyHandler(c *cfg.Cfg, notifiers []notifier.Notifier) *NotifyHandler {
-	return &NotifyHandler{
-		c:         c,
-		notifiers: notifiers,
-	}
+func NewNotifyHandler(notifiers []notifier.Notifier) *NotifyHandler {
+	return &NotifyHandler{notifiers: notifiers}
 }
 
 func (nh *NotifyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -86,35 +81,32 @@ func (nh *NotifyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	wg := &sync.WaitGroup{}
 	clientToken := r.Header.Get("Authorization")
 
-	for i, v := range nh.notifiers {
+	for _, v := range nh.notifiers {
 		wg.Add(1)
-		go func(idx int, n notifier.Notifier) {
+
+		go func(n notifier.Notifier) {
 			defer wg.Done()
 
-			if clientToken != "" {
-				localToken := nh.c.Notifiers[idx].Authorization
-				if localToken == "" {
-					localToken = nh.c.Authorization
-				}
+			if ae := n.Authorize(clientToken); ae != nil {
+				slog.ErrorContext(
+					r.Context(),
+					"rejected unauthorized notification",
+					slog.String("platform", n.Platform()),
+					slog.String("error", ae.Error()),
+				)
 
-				if localToken != "" && localToken != clientToken {
-					slog.ErrorContext(
-						r.Context(),
-						"incorrect authorization token",
-						slog.Int("notifier_index", idx),
-					)
-					return
-				}
+				return
 			}
 
-			if ce := n.Notify(r.Context(), &event); ce != nil {
+			if ne := n.Notify(r.Context(), &event); ne != nil {
 				slog.ErrorContext(
 					r.Context(),
 					"failed to send notification",
-					slog.String("error", ce.Error()),
+					slog.String("platform", n.Platform()),
+					slog.String("error", ne.Error()),
 				)
 			}
-		}(i, v)
+		}(v)
 	}
 
 	wg.Wait()
