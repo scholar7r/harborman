@@ -8,17 +8,15 @@ import (
 )
 
 type Cfg struct {
-	Debug  bool   `yaml:"debug"`
-	Listen string `yaml:"listen"`
-	// global authorization header
-	Authorization string        `yaml:"authorization"`
-	Notifiers     []NotifierCfg `yaml:"notifiers"`
+	Debug     bool          `yaml:"debug"`
+	Listen    string        `yaml:"listen"`
+	Notifiers []NotifierCfg `yaml:"notifiers"`
 }
 
 type NotifierCfg struct {
 	Type NotifierType `yaml:"type"`
 	URL  string       `yaml:"url"`
-	// authorization header for notifier, precedence over the global one
+	// authorization header the notifier requires, unverified when empty
 	Authorization string `yaml:"authorization"`
 }
 
