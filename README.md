@@ -17,14 +17,17 @@ Below is a simple configuration file template. You can name it
 ```yaml
 debug: false
 listen: ":80"
-authorization: "..."
 notifiers:
   - type: lark
     url: "https://..."
-    authorization: "..."
+    authorization: "..." # required on incoming requests when set
   - type: discord
     url: "https://..."
 ```
+
+A notifier with an `authorization` value only fires when the incoming Harbor
+webhook carries a matching `Authorization` header. Omit the field to skip
+verification for that notifier.
 
 ## Installation
 
