@@ -38,8 +38,13 @@ type LarkField struct {
 
 type Lark struct{}
 
-func NewLark(client *http.Client, notifyURL string, pushEventFilter *filter.PushEventFilter) Notifier {
-	return newWebhook(client, notifyURL, pushEventFilter, &Lark{})
+func NewLark(
+	client *http.Client,
+	notifyURL string,
+	token string,
+	pushEventFilter *filter.PushEventFilter,
+) Notifier {
+	return newWebhook(client, notifyURL, token, pushEventFilter, &Lark{})
 }
 
 func (l *Lark) Platform() string {

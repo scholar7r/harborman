@@ -3,6 +3,7 @@ package notifier
 
 import (
 	"context"
+	"errors"
 	"log/slog"
 	"net/http"
 	"net/url"
@@ -12,12 +13,17 @@ import (
 	"github.com/scholar7r/harborman/internal/harbor"
 )
 
+var ErrTokenMismatch = errors.New("authorization token mismatch")
+
 type Notifier interface {
-	Notify(context.Context, *harbor.Event) error
+	Platform() string
+	Authorize(clientToken string) error
+	Notify(ctx context.Context, e *harbor.Event) error
 }
 
 func FromCfg(client *http.Client, nc []cfg.NotifierCfg) []Notifier {
 	var notifiers []Notifier
+
 	for i, v := range nc {
 		if v.Type == "" || v.URL == "" {
 			slog.Warn(
@@ -46,9 +52,15 @@ func FromCfg(client *http.Client, nc []cfg.NotifierCfg) []Notifier {
 
 		switch v.Type {
 		case cfg.NotifierTypeDiscord:
-			notifiers = append(notifiers, NewDiscord(client, v.URL, pushEventFilter))
+			notifiers = append(
+				notifiers,
+				NewDiscord(client, v.URL, v.Authorization, pushEventFilter),
+			)
 		case cfg.NotifierTypeLark:
-			notifiers = append(notifiers, NewLark(client, v.URL, pushEventFilter))
+			notifiers = append(
+				notifiers,
+				NewLark(client, v.URL, v.Authorization, pushEventFilter),
+			)
 		default:
 			slog.Warn(
 				"unsupported notifier type",

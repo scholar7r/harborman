@@ -21,6 +21,7 @@ type payloadBuilder interface {
 type webhook struct {
 	client          *http.Client
 	notifyURL       string
+	token           string
 	pushEventFilter *filter.PushEventFilter
 	builder         payloadBuilder
 }
@@ -28,15 +29,33 @@ type webhook struct {
 func newWebhook(
 	client *http.Client,
 	notifyURL string,
+	token string,
 	pushEventFilter *filter.PushEventFilter,
 	builder payloadBuilder,
 ) Notifier {
 	return &webhook{
 		client:          client,
 		notifyURL:       notifyURL,
+		token:           token,
 		pushEventFilter: pushEventFilter,
 		builder:         builder,
 	}
+}
+
+func (w *webhook) Platform() string {
+	return w.builder.Platform()
+}
+
+func (w *webhook) Authorize(clientToken string) error {
+	if w.token == "" {
+		return nil
+	}
+
+	if w.token != clientToken {
+		return ErrTokenMismatch
+	}
+
+	return nil
 }
 
 func (w *webhook) Notify(ctx context.Context, e *harbor.Event) error {

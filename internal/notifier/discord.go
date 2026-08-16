@@ -37,8 +37,13 @@ type EmbedFooter struct {
 
 type Discord struct{}
 
-func NewDiscord(client *http.Client, notifyURL string, pushEventFilter *filter.PushEventFilter) Notifier {
-	return newWebhook(client, notifyURL, pushEventFilter, &Discord{})
+func NewDiscord(
+	client *http.Client,
+	notifyURL string,
+	token string,
+	pushEventFilter *filter.PushEventFilter,
+) Notifier {
+	return newWebhook(client, notifyURL, token, pushEventFilter, &Discord{})
 }
 
 func (d *Discord) Platform() string {
