@@ -4,8 +4,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/scholar7r/harborman/internal/harbor"
 	"github.com/scholar7r/harborman/internal/notifier"
+	"github.com/scholar7r/harborman/pkg/harbor"
 )
 
 func TestDiscord_BuildPushArtifact(t *testing.T) {

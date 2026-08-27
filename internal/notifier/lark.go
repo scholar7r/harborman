@@ -6,8 +6,7 @@ import (
 	"strings"
 
 	"github.com/scholar7r/harborman/internal/cfg"
-	"github.com/scholar7r/harborman/internal/filter"
-	"github.com/scholar7r/harborman/internal/harbor"
+	"github.com/scholar7r/harborman/pkg/harbor"
 )
 
 type LarkPayload struct {
@@ -42,7 +41,7 @@ func NewLark(
 	client *http.Client,
 	notifyURL string,
 	token string,
-	pushEventFilter *filter.PushEventFilter,
+	pushEventFilter *harbor.PushEventFilter,
 ) Notifier {
 	return newWebhook(client, notifyURL, token, pushEventFilter, &Lark{})
 }

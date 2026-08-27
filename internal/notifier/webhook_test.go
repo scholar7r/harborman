@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/scholar7r/harborman/internal/filter"
 	"github.com/scholar7r/harborman/internal/notifier"
+	"github.com/scholar7r/harborman/pkg/harbor"
 )
 
 func TestWebhook_Authorize(t *testing.T) {
@@ -53,7 +53,7 @@ func TestWebhook_Authorize(t *testing.T) {
 				&http.Client{},
 				"https://example.invalid",
 				tt.token,
-				filter.NewPushEventFilter(),
+				harbor.NewPushEventFilter(),
 			)
 
 			if got := n.Authorize(tt.clientToken); !errors.Is(got, tt.want) {
@@ -75,7 +75,7 @@ func TestWebhook_Platform(t *testing.T) {
 				&http.Client{},
 				"https://example.invalid",
 				"",
-				filter.NewPushEventFilter(),
+				harbor.NewPushEventFilter(),
 			),
 			want: "discord",
 		},
@@ -85,7 +85,7 @@ func TestWebhook_Platform(t *testing.T) {
 				&http.Client{},
 				"https://example.invalid",
 				"",
-				filter.NewPushEventFilter(),
+				harbor.NewPushEventFilter(),
 			),
 			want: "lark",
 		},

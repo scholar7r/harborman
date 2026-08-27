@@ -1,4 +1,4 @@
-// Package harbor provides harbor event data types
+// Package harbor provides harbor event data types and abilities
 package harbor
 
 const (
