@@ -1,0 +1,12 @@
+name: E2E Testing
+
+on:
+  push:
+    branches:
+      - main
+  pull_request: {}
+
+jobs:
+  e2e-testing:
+    runs-on: ubuntu-latest
+    # TODO: Steps
