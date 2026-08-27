@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/scholar7r/harborman/internal/notifier"
-	"github.com/scholar7r/harborman/pkg/harbor"
+	"github.com/scholar7r/harborman/v2/internal/notifier"
+	"github.com/scholar7r/harborman/v2/pkg/harbor"
 )
 
 type NotifyHandler struct {
