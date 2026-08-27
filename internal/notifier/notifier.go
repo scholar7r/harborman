@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/scholar7r/harborman/internal/cfg"
-	"github.com/scholar7r/harborman/pkg/harbor"
+	"github.com/scholar7r/harborman/v2/internal/cfg"
+	"github.com/scholar7r/harborman/v2/pkg/harbor"
 )
 
 var ErrTokenMismatch = errors.New("authorization token mismatch")

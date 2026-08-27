@@ -9,7 +9,7 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/scholar7r/harborman/pkg/harbor"
+	"github.com/scholar7r/harborman/v2/pkg/harbor"
 )
 
 type payloadBuilder interface {

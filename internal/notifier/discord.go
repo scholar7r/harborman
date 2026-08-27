@@ -5,8 +5,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/scholar7r/harborman/internal/cfg"
-	"github.com/scholar7r/harborman/pkg/harbor"
+	"github.com/scholar7r/harborman/v2/internal/cfg"
+	"github.com/scholar7r/harborman/v2/pkg/harbor"
 )
 
 const discordColorGreen = 0x57F287
