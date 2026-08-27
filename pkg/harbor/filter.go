@@ -1,7 +1,4 @@
-// Package filter provides the ability to filter harbor events
-package filter
-
-import "github.com/scholar7r/harborman/internal/harbor"
+package harbor
 
 type (
 	PushEventFilterOption func(*PushEventFilter)
@@ -21,12 +18,12 @@ func NewPushEventFilter(opts ...PushEventFilterOption) *PushEventFilter {
 	return pushEventFilter
 }
 
-func (f *PushEventFilter) Filter(e *harbor.Event) []harbor.Resource {
+func (f *PushEventFilter) Filter(e *Event) []Resource {
 	if e == nil || len(e.EventData.Resources) == 0 {
 		return nil
 	}
 
-	var filtered []harbor.Resource
+	var filtered []Resource
 
 	for _, v := range e.EventData.Resources {
 		if f.filterNoTag && isNoTag(v) {
@@ -55,10 +52,10 @@ func WithFilterTagEqualDigest() PushEventFilterOption {
 	}
 }
 
-func isNoTag(r harbor.Resource) bool {
+func isNoTag(r Resource) bool {
 	return r.Tag == ""
 }
 
-func isTagEqualDigest(r harbor.Resource) bool {
+func isTagEqualDigest(r Resource) bool {
 	return r.Tag != "" && r.Tag == r.Digest
 }

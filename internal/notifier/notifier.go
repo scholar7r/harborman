@@ -9,8 +9,7 @@ import (
 	"net/url"
 
 	"github.com/scholar7r/harborman/internal/cfg"
-	"github.com/scholar7r/harborman/internal/filter"
-	"github.com/scholar7r/harborman/internal/harbor"
+	"github.com/scholar7r/harborman/pkg/harbor"
 )
 
 var ErrTokenMismatch = errors.New("authorization token mismatch")
@@ -45,9 +44,9 @@ func FromCfg(client *http.Client, nc []cfg.NotifierCfg) []Notifier {
 			continue
 		}
 
-		pushEventFilter := filter.NewPushEventFilter(
-			filter.WithFilterNoTag(),
-			filter.WithFilterTagEqualDigest(),
+		pushEventFilter := harbor.NewPushEventFilter(
+			harbor.WithFilterNoTag(),
+			harbor.WithFilterTagEqualDigest(),
 		)
 
 		switch v.Type {

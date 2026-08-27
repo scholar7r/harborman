@@ -6,8 +6,7 @@ import (
 	"time"
 
 	"github.com/scholar7r/harborman/internal/cfg"
-	"github.com/scholar7r/harborman/internal/filter"
-	"github.com/scholar7r/harborman/internal/harbor"
+	"github.com/scholar7r/harborman/pkg/harbor"
 )
 
 const discordColorGreen = 0x57F287
@@ -41,7 +40,7 @@ func NewDiscord(
 	client *http.Client,
 	notifyURL string,
 	token string,
-	pushEventFilter *filter.PushEventFilter,
+	pushEventFilter *harbor.PushEventFilter,
 ) Notifier {
 	return newWebhook(client, notifyURL, token, pushEventFilter, &Discord{})
 }

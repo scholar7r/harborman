@@ -1,29 +1,28 @@
-package filter_test
+package harbor_test
 
 import (
 	"reflect"
 	"testing"
 
-	"github.com/scholar7r/harborman/internal/filter"
-	"github.com/scholar7r/harborman/internal/harbor"
+	"github.com/scholar7r/harborman/pkg/harbor"
 )
 
 func TestPushEventFilter_Filter(t *testing.T) {
 	tests := []struct {
 		name string
-		opts []filter.PushEventFilterOption
+		opts []harbor.PushEventFilterOption
 		e    *harbor.Event
 		want []harbor.Resource
 	}{
 		{
 			name: "event is nil",
-			opts: []filter.PushEventFilterOption{},
+			opts: []harbor.PushEventFilterOption{},
 			e:    nil,
 			want: nil,
 		},
 		{
 			name: "resources is empty",
-			opts: []filter.PushEventFilterOption{},
+			opts: []harbor.PushEventFilterOption{},
 			e: &harbor.Event{
 				EventData: harbor.EventData{
 					Resources: make([]harbor.Resource, 0),
@@ -33,8 +32,8 @@ func TestPushEventFilter_Filter(t *testing.T) {
 		},
 		{
 			name: "filter no tag",
-			opts: []filter.PushEventFilterOption{
-				filter.WithFilterNoTag(),
+			opts: []harbor.PushEventFilterOption{
+				harbor.WithFilterNoTag(),
 			},
 			e: &harbor.Event{
 				EventData: harbor.EventData{
@@ -50,8 +49,8 @@ func TestPushEventFilter_Filter(t *testing.T) {
 		},
 		{
 			name: "filter tag equal digest",
-			opts: []filter.PushEventFilterOption{
-				filter.WithFilterTagEqualDigest(),
+			opts: []harbor.PushEventFilterOption{
+				harbor.WithFilterTagEqualDigest(),
 			},
 			e: &harbor.Event{
 				EventData: harbor.EventData{
@@ -70,9 +69,9 @@ func TestPushEventFilter_Filter(t *testing.T) {
 		},
 		{
 			name: "filter no tag and tag equal digest",
-			opts: []filter.PushEventFilterOption{
-				filter.WithFilterNoTag(),
-				filter.WithFilterTagEqualDigest(),
+			opts: []harbor.PushEventFilterOption{
+				harbor.WithFilterNoTag(),
+				harbor.WithFilterTagEqualDigest(),
 			},
 			e: &harbor.Event{
 				EventData: harbor.EventData{
@@ -93,7 +92,7 @@ func TestPushEventFilter_Filter(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			f := filter.NewPushEventFilter(tt.opts...)
+			f := harbor.NewPushEventFilter(tt.opts...)
 			got := f.Filter(tt.e)
 
 			if !reflect.DeepEqual(got, tt.want) {

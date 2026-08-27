@@ -9,8 +9,7 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/scholar7r/harborman/internal/filter"
-	"github.com/scholar7r/harborman/internal/harbor"
+	"github.com/scholar7r/harborman/pkg/harbor"
 )
 
 type payloadBuilder interface {
@@ -22,7 +21,7 @@ type webhook struct {
 	client          *http.Client
 	notifyURL       string
 	token           string
-	pushEventFilter *filter.PushEventFilter
+	pushEventFilter *harbor.PushEventFilter
 	builder         payloadBuilder
 }
 
@@ -30,7 +29,7 @@ func newWebhook(
 	client *http.Client,
 	notifyURL string,
 	token string,
-	pushEventFilter *filter.PushEventFilter,
+	pushEventFilter *harbor.PushEventFilter,
 	builder payloadBuilder,
 ) Notifier {
 	return &webhook{
